@@ -17,20 +17,38 @@
     </div>
     
 
-    <div>
-      <div class="menu" >
-        <ul class="person">
-        </ul>
-      </div>
+   <div class="container">
+      <ol class="menu" >
+        
+          <!-- <li class="item"..>
+            
+               </li> -->
+      </ol>
 
-     
-
-
-  
-      <div class="right">
-        <h2>About</h2>
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
-      </div>
+      <ol class="favoriteClass">
+          <li class="item" id-key='${(item.id = index)}'>${item.name}
+            <button  class="arrow-button"><i class="arrow"></i></button>
+            <button  class="favorite-button"><i class="fa fa-heart" style="font-size:12px"></i></button>
+              <div  class="item-info hidden">
+              <p>birth_year: ${item.birth_year}</p>
+               <p>Mass: ${item.mass} kg</p>
+              <p>Eye_color: ${item.eye_color}</p>
+              <p>Gender: ${item.gender}</p> 
+             <p>Url: ${item.url}</p> 
+            </div>
+             </li>
+             <li class="item" id-key='${(item.id = index)}'>${item.name}
+              <button  class="arrow-button"><i class="arrow"></i></button>
+              <button  class="favorite-button"><i class="fa fa-heart" style="font-size:12px"></i></button>
+                <div  class="item-info">
+                <p>birth_year: ${item.birth_year}</p>
+                 <p>Mass: ${item.mass} kg</p>
+                <p>Eye_color: ${item.eye_color}</p>
+                <p>Gender: ${item.gender}</p> 
+               <p>Url: ${item.url}</p> 
+              </div>
+               </li>
+      </ol>
     </div>
     
 
