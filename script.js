@@ -1,15 +1,5 @@
-'use strict';
-
-const person = document.querySelector('.person');
-const right = document.querySelector('.right');
-const favoriteBtn = document.querySelector('.favorite-button');
-const showItemBtn = document.querySelector('.menu');
-
-let test = [];
-
-getDatarequest();
-
-function getDatarequest() {
+getDataLoad();
+function getDataLoad() {
   const xhr = new XMLHttpRequest(),
     method = 'GET',
     url = 'https://swapi.dev/api/people/';
@@ -22,93 +12,155 @@ function getDatarequest() {
     if (xhr.status != 200) {
       console.log('error load');
     } else {
-      let resData = xhr.response.results;
-      test = resData;
-      console.log(test);
-      addTolocalStogare(test);
+      let opp = xhr.response;
+      let pop = opp.results;
+      console.log(pop);
+
+      localStorage.setItem('pop', JSON.stringify(pop));
+      pop = JSON.parse(localStorage.getItem('pop'));
+      renderPersons(pop);
+      console.log(typeof pop);
+      console.log(pop);
+      // toggle();
+      // toggle();
     }
   };
 
   xhr.send();
 }
+// function addTolocalStogare() {
+//   localStorage.setItem('test', JSON.stringify(test));
+// }
 
-function addTolocalStogare(test) {
-  localStorage.setItem('test', JSON.stringify(test));
-  renderPersons(test);
-}
+// function getFromLocalStorage() {
+//   let row = localStorage.getItem(test);
+//   let data = JSON.parse(row);
+//   console.log(data);
+//   // toggle();
+// }
 
-function getFromLocalStorage() {
-  let row = localStorage.getItem('test');
-  if (row) {
-    test = JSON.parse(row);
-  }
-}
-getFromLocalStorage();
-
-function renderPersons(test) {
-  let html = test
+function renderPersons(pop) {
+  console.log(pop);
+  const menu = document.querySelector('.menu');
+  let html = pop
     .map((item, index) => {
       return `
-        <li class="item" id-key='${(item.id = index)}'>${item.name}
-        <button  class="arrow-button"><i class="arrow down"></i></button>
-        <button  class="favorite-button"><i class="fa fa-heart" style="font-size:12px"></i></button>
-        <div  class="item-info hidden">
+        <li class="item" id-key='${(item.id = index)}' '${(item.completed = false)}'>${
+        item.name
+      }
+        <button id="btn" class="arrow-button"><i class="arrow"></i></button>
+        <button class="favorite-button"><i class="fa fa-heart"></i></button>
+        <div  class="item-info">
         <p>birth_year: ${item.birth_year}</p>
         <p>Mass: ${item.mass} kg</p>
         <p>Eye_color: ${item.eye_color}</p>
         <p>Gender: ${item.gender}</p> 
         <p>Url: ${item.url}</p> 
-        </li>
-        
-
         </div>
+        </li>
         `;
     })
     .join('');
-  console.log(test);
-  person.innerHTML = html;
+
+  menu.innerHTML = html;
+  // const arrowBtn = document.querySelector('arrow-button');
+  // document.addEventListener('click', function () {
+  //   console.log('happy');
+  // });
+  // addTolocalStogare();
+  // toggle(pop);
 }
-
-// function deleteTodo(test) {
-//   test = test.filter(function (item) {
-//     return item.id !== todoID;
-//   });
-
-//   addTolocalStogare(test);
-// }
-
-function toggleDocs(event) {
-  event.target.parentElement
-    .querySelector('.item-info')
-    .classList.toggle('hidden');
-
-  event.target.parentElement
-    .querySelector('.item-info')
-    .classList.toggle('hidden2');
-
-  event.target.parentElement
-    .querySelector('.arrow-button')
-    .classList.toggle('up');
-}
-
-showItemBtn.addEventListener('click', toggleDocs);
-
-// function taggleFavorites(event) {
-//   let todoId = event.target.parentElement.getAttribute('id-key');
-//   if (target.classList.contains('favorite-button')) {
-//     deleteTodo(todoId);
-//   }
-// }
-
-// right.addEventListener('click', taggleFavorites);
-
+// const arrowBtn = document.querySelector('.arrow-button');
+// function toggle() {
 // function toggleDocs(event) {
-//   event.target.parentElement.querySelector('.item-info').classList.toggle('up');
+//   event.target.parentElement
+//     .querySelector('.item-info')
+//     .classList.toggle('hidden');
+
+//   event.target.parentElement
+//     .querySelector('.item-info')
+//     .classList.toggle('hidden-after');
+
+//   event.target.parentElement
+//     .querySelector('.arrow-button')
+//     .classList.toggle('up');
 // }
 
-// const transformIt = (e) => {
-//   var element = document.getElementsByClassName('arrow');
-//   element[0].classList.toggle('up');
-// };
+function toggle() {
+  const menu = document.querySelector('.menu');
+  menu.addEventListener('click', toggleDocs);
 
-// document.getElementsByClassName('arrow').addEventListener('click', transformIt);
+  // document.querySelectorAll('.arrow-button').forEach((item) => {
+  //   item.addEventListener('click', toggleDocs);
+  // });
+
+  // document.querySelectorAll('.favorite-button').forEach((item) => {
+  //   item.addEventListener('click', addToFav);
+  // });
+
+  function toggleDocs(event) {
+    const target = event.target;
+    const listItem = target.parentElement;
+    const openEl = document.querySelector('.open');
+
+    if (target.classList.contains('arrow-button')) {
+      if (openEl) {
+        openEl.classList.remove('open');
+      }
+      listItem.classList.add('open');
+      if (openEl) {
+        openEl.classList.remove('open');
+      }
+    }
+  }
+
+  // event.target.classList.toggle('hidden');
+
+  // event.target.classList.toggle('hidden-after');
+
+  // event.target.parentElement
+  //   .querySelector('.arrow-button')
+  //   .classList.toggle('up');
+
+  //   let todoId = event.target.parentElement.getAttribute('id-key');
+  //   if (event.target.type === 'checkbox') {
+  //     console.log('mega');
+  //   }
+  //   console.log(todoId);
+  // }
+}
+toggle();
+function addToFav() {
+  console.log('super');
+  favoriteClass.innerHTML = 'hello';
+}
+
+// function heart() {
+//   const parent = this.parentNode;
+//   parent.remove();
+//   favoriteClass.appendChild(parent);
+// }
+
+// function toggle() {
+//   const arrowBtn = document.querySelector('.arrow-button');
+//   function toggleEvent(event) {
+//     let todoId = event.target.parentElement.getAttribute('id-key');
+//     console.log(todoId);
+
+//     if (event.target.classList.contains('arrow-button')) {
+//       event.target.parentElement
+//         .querySelector('.item-info')
+//         .classList.toggle('hidden');
+//     }
+//   }
+
+//   arrowBtn.addEventListener('click', toggleEvent);
+// }
+// document.addEventListener('click', toggleDocs);
+// }
+// toggle();
+
+// const arrowBtn = document.querySelector('.arrow');
+// arrowBtn.addEventListener('click', function () {
+//   console.log('happy');
+// });
