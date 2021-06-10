@@ -10,7 +10,7 @@ body {
       #ced0ff,
       #ced0ff,
       20px,
-      transparent 40px,
+      transparent 30px,
       transparent 20px
     );
   background-blend-mode: multiply;
@@ -24,6 +24,8 @@ img {
 }
 ul {
   list-style-type: none;
+  padding: 0px;
+  margin: 0px 12px 0px 12px;
 }
 
 button {
@@ -35,7 +37,6 @@ button:hover {
 }
 
 .banner {
-  /* background-color: #e5e5e5; */
   padding: 15px;
   text-align: center;
 }
@@ -48,18 +49,19 @@ button:hover {
 
 .item {
   background-color: rgba(255, 255, 255, 0.418);
+  list-style-type: none;
   padding: 8px 0px 0px 0px;
   font-size: 1.4rem;
   margin: 4px 0px;
   border-radius: 2px;
 }
-
-.right {
-  background-color: #e5e5e5;
+i.fa {
+  font-size: 12px;
+  pointer-events: none;
+}
+.favoriteClass {
   float: right;
-  width: 47%;
-  padding: 23px 20px;
-  margin-top: 7px;
+  width: 50%;
   text-align: center;
 }
 
@@ -84,15 +86,14 @@ button:hover {
   font-weight: 550;
 }
 
-.hidden {
-  /* display: none; */
+/* .hidden {
   visibility: hidden;
   opacity: 0;
   max-height: 0px;
-  /* transform: translateY(-100%); */
   transition: max-height ease 1s, opacity ease 0.5s;
-}
-.hidden2 {
+} */
+
+.open .item-info {
   /* display: none; */
   visibility: visible;
   opacity: 1;
@@ -100,24 +101,19 @@ button:hover {
   /* transform: translateY(0%); */
   transition: max-height ease 1s, opacity ease 3s;
 }
-
-.personDetails {
-  color: white;
-  width: 100%;
-  background-color: rgba(151, 146, 146, 0.233);
-}
 .arrow {
   border: solid black;
   position: relative;
   border-width: 0 2px 2px 0;
   display: inline-block;
   padding: 3px;
+  pointer-events: none;
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
-
-.arrow.down {
-  pointer-events: none;
+.up .arrow {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
 }
 
 .item-info {
@@ -126,23 +122,22 @@ button:hover {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.753);
   padding: 2px 8px;
+  visibility: hidden;
+  opacity: 0;
+  max-height: 0px;
+  transition: max-height ease 1s, opacity ease 0.5s;
 }
 
-.up {
-  transform: rotate(-180deg);
-  -webkit-transform: rotate(-180deg);
+.personDetails {
+  color: white;
+  width: 100%;
+  background-color: rgba(151, 146, 146, 0.233);
 }
-/* .down {
-  color: red;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-} */
 
 @media only screen and (max-width: 620px) {
   /* For mobile phones: */
   .menu,
-  .main,
-  .right {
+  .favoriteClass {
     width: 100%;
   }
 }
