@@ -102,14 +102,18 @@ function toggle() {
     const target = event.target;
     const listItem = target.parentElement;
     const openEl = document.querySelector('.open');
+    const upEl = document.querySelector('.up');
 
     if (target.classList.contains('arrow-button')) {
-      if (openEl) {
+      if (openEl && upEl) {
         openEl.classList.remove('open');
+        upEl.classList.remove('up');
       }
       listItem.classList.add('open');
-      if (openEl) {
+      listItem.classList.add('up');
+      if (openEl && upEl) {
         openEl.classList.remove('open');
+        upEl.classList.remove('up');
       }
     }
   }
