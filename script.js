@@ -2,34 +2,44 @@
 let people;
 let favPeople = [];
 
+const container = document.querySelector('.container');
+container.addEventListener('click', eventOpenBtn);
+
+if (localStorage.getItem('people')) {
+  const getPeopleData = localStorage.getItem('people');
+  people = JSON.parse(getPeopleData);
+  renderPersons(people);
+} else {
+  getDataFromSWAPI(initApp);
+}
+
 // execution --->
 
-getDataFromSWAPI(initApp);
+// getDataFromSWAPI(initApp);
 
 // fisrst get data from SWAPI:
 
 function getDataFromSWAPI(loadHandler) {
   const xhr = new XMLHttpRequest();
+
   const method = 'GET';
   const url = 'https://swapi.dev/api/people/';
 
   xhr.responseType = 'json';
   xhr.open(method, url, true);
-  xhr.send();
 
   xhr.addEventListener('load', loadHandler);
+  xhr.send();
 }
 
 function initApp(event) {
   const xhr = event.target;
   const data = xhr.response;
+
   people = data.results;
 
-  const container = document.querySelector('.container');
-
+  localStorage.setItem('people', JSON.stringify(people));
   renderPersons(people);
-
-  container.addEventListener('click', eventOpenBtn);
 }
 
 function renderPersons(people) {
@@ -129,3 +139,5 @@ function eventOpenBtn(event) {
       .classList.remove('active-fav-button');
   }
 }
+
+
