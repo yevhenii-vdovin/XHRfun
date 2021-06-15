@@ -1,170 +1,131 @@
-getDataLoad();
-function getDataLoad() {
-  const xhr = new XMLHttpRequest(),
-    method = 'GET',
-    url = 'https://swapi.dev/api/people/';
+// varaibles ---
+let people;
+let favPeople = [];
 
-  xhr.open(method, url, true);
+// execution --->
+
+getDataFromSWAPI(initApp);
+
+// fisrst get data from SWAPI:
+
+function getDataFromSWAPI(loadHandler) {
+  const xhr = new XMLHttpRequest();
+  const method = 'GET';
+  const url = 'https://swapi.dev/api/people/';
 
   xhr.responseType = 'json';
-
-  xhr.onload = function () {
-    if (xhr.status != 200) {
-      console.log('error load');
-    } else {
-      let opp = xhr.response;
-      let pop = opp.results;
-      console.log(pop);
-
-      localStorage.setItem('pop', JSON.stringify(pop));
-      pop = JSON.parse(localStorage.getItem('pop'));
-      renderPersons(pop);
-      console.log(typeof pop);
-      console.log(pop);
-      // toggle();
-      // toggle();
-    }
-  };
-
+  xhr.open(method, url, true);
   xhr.send();
+
+  xhr.addEventListener('load', loadHandler);
 }
-// function addTolocalStogare() {
-//   localStorage.setItem('test', JSON.stringify(test));
-// }
 
-// function getFromLocalStorage() {
-//   let row = localStorage.getItem(test);
-//   let data = JSON.parse(row);
-//   console.log(data);
-//   // toggle();
-// }
+function initApp(event) {
+  const xhr = event.target;
+  const data = xhr.response;
+  people = data.results;
 
-function renderPersons(pop) {
-  console.log(pop);
+  const container = document.querySelector('.container');
+
+  renderPersons(people);
+
+  container.addEventListener('click', eventOpenBtn);
+}
+
+function renderPersons(people) {
   const menu = document.querySelector('.menu');
-  let html = pop
+  let html = people
     .map((item, index) => {
       return `
-        <li class="item" id-key='${(item.id = index)}' '${(item.completed = false)}'>${
+      <li class="item" id-key='${(item.id = index)}' '${(item.completed = false)}'>${
         item.name
       }
-        <button id="btn" class="arrow-button"><i class="arrow"></i></button>
-        <button class="favorite-button"><i class="fa fa-heart"></i></button>
-        <div  class="item-info">
-        <p>birth_year: ${item.birth_year}</p>
-        <p>Mass: ${item.mass} kg</p>
-        <p>Eye_color: ${item.eye_color}</p>
-        <p>Gender: ${item.gender}</p> 
-        <p>Url: ${item.url}</p> 
-        </div>
-        </li>
-        `;
+      <button id="btn" class="arrow-button"><i class="arrow"></i></button>
+      <button class="favorite-button"><i class="fa fa-heart"></i></button>
+      <div  class="item-info">
+      <p>birth_year: ${item.birth_year}</p>
+      <p>Mass: ${item.mass} kg</p>
+      <p>Eye_color: ${item.eye_color}</p>
+      <p>Gender: ${item.gender}</p>
+      <p>Url: ${item.url}</p>
+      </div>
+      </li>
+      `;
     })
     .join('');
 
   menu.innerHTML = html;
-  // const arrowBtn = document.querySelector('arrow-button');
-  // document.addEventListener('click', function () {
-  //   console.log('happy');
-  // });
-  // addTolocalStogare();
-  // toggle(pop);
 }
-// const arrowBtn = document.querySelector('.arrow-button');
-// function toggle() {
-// function toggleDocs(event) {
-//   event.target.parentElement
-//     .querySelector('.item-info')
-//     .classList.toggle('hidden');
 
-//   event.target.parentElement
-//     .querySelector('.item-info')
-//     .classList.toggle('hidden-after');
+function addFav(personId) {
+  let findPersonForaddFav = people.filter((item) => {
+    return item.id === +personId;
+  });
 
-//   event.target.parentElement
-//     .querySelector('.arrow-button')
-//     .classList.toggle('up');
-// }
+  if (!favPeople.some((item) => item.id === +personId)) {
+    favPeople.push(findPersonForaddFav[0]);
+  } else {
+    removeFromFavs(personId);
+    showFavPeople();
+  }
+}
 
-function toggle() {
-  const menu = document.querySelector('.menu');
-  menu.addEventListener('click', toggleDocs);
+function showFavPeople() {
+  const favContainer = document.querySelector('.favContainer');
+  let showFavPeople = favPeople
+    .map((item) => {
+      return `
+    <li class="item" id-key='${item.id}'>${item.name}
+    <button id="btn" class="arrow-button"><i class="arrow"></i></button>
+    <button class="favbtn"><i class="fa fa-heart"></i></button>
+    <div  class="item-info">
+    <p>birth_year: ${item.birth_year}</p>
+    <p>Mass: ${item.mass} kg</p>
+    <p>Eye_color: ${item.eye_color}</p>
+    <p>Gender: ${item.gender}</p>
+    <p>Url: ${item.url}</p>
+    </div>
+    </li>
+    `;
+    })
+    .join('');
 
-  // document.querySelectorAll('.arrow-button').forEach((item) => {
-  //   item.addEventListener('click', toggleDocs);
-  // });
+  favContainer.innerHTML = showFavPeople;
+}
 
-  // document.querySelectorAll('.favorite-button').forEach((item) => {
-  //   item.addEventListener('click', addToFav);
-  // });
+function removeFromFavs(personId) {
+  favPeople = favPeople.filter((item) => {
+    return item.id !== +personId;
+  });
+}
 
-  function toggleDocs(event) {
-    const target = event.target;
-    const listItem = target.parentElement;
-    const openEl = document.querySelector('.open');
-    const upEl = document.querySelector('.up');
+function eventOpenBtn(event) {
+  const target = event.target;
+  const listItem = target.parentElement;
+  const openEl = document.querySelector('.open');
 
-    if (target.classList.contains('arrow-button')) {
-      if (openEl && upEl) {
-        openEl.classList.remove('open');
-        upEl.classList.remove('up');
-      }
-      listItem.classList.add('open');
-      listItem.classList.add('up');
-      if (openEl && upEl) {
-        openEl.classList.remove('open');
-        upEl.classList.remove('up');
-      }
+  if (target.classList.contains('arrow-button')) {
+    if (openEl) {
+      openEl.classList.remove('open');
     }
+    if (openEl === listItem) {
+      return;
+    }
+    listItem.classList.add('open');
   }
 
-  // event.target.classList.toggle('hidden');
+  let personId = event.target.parentElement.getAttribute('id-key');
 
-  // event.target.classList.toggle('hidden-after');
-
-  // event.target.parentElement
-  //   .querySelector('.arrow-button')
-  //   .classList.toggle('up');
-
-  //   let todoId = event.target.parentElement.getAttribute('id-key');
-  //   if (event.target.type === 'checkbox') {
-  //     console.log('mega');
-  //   }
-  //   console.log(todoId);
-  // }
+  if (target.classList.contains('favorite-button')) {
+    addFav(personId);
+    showFavPeople();
+    listItem.classList.toggle('active-fav-button');
+  }
+  if (target.classList.contains('favbtn')) {
+    removeFromFavs(personId);
+    showFavPeople();
+    document
+      .querySelector(`.item[id-key="${personId}"]`)
+      .classList.remove('active-fav-button');
+  }
 }
-toggle();
-function addToFav() {
-  console.log('super');
-  favoriteClass.innerHTML = 'hello';
-}
-
-// function heart() {
-//   const parent = this.parentNode;
-//   parent.remove();
-//   favoriteClass.appendChild(parent);
-// }
-
-// function toggle() {
-//   const arrowBtn = document.querySelector('.arrow-button');
-//   function toggleEvent(event) {
-//     let todoId = event.target.parentElement.getAttribute('id-key');
-//     console.log(todoId);
-
-//     if (event.target.classList.contains('arrow-button')) {
-//       event.target.parentElement
-//         .querySelector('.item-info')
-//         .classList.toggle('hidden');
-//     }
-//   }
-
-//   arrowBtn.addEventListener('click', toggleEvent);
-// }
-// document.addEventListener('click', toggleDocs);
-// }
-// toggle();
-
-// const arrowBtn = document.querySelector('.arrow');
-// arrowBtn.addEventListener('click', function () {
-//   console.log('happy');
-// });
