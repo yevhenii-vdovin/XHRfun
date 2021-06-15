@@ -21,7 +21,6 @@ if (localStorage.getItem('people')) {
 
 function getDataFromSWAPI(loadHandler) {
   const xhr = new XMLHttpRequest();
-
   const method = 'GET';
   const url = 'https://swapi.dev/api/people/';
 
@@ -101,6 +100,7 @@ function showFavPeople() {
     .join('');
 
   favContainer.innerHTML = showFavPeople;
+  postDataToServer();
 }
 
 function removeFromFavs(personId) {
@@ -140,4 +140,14 @@ function eventOpenBtn(event) {
   }
 }
 
+function postDataToServer() {
+  const post = new XMLHttpRequest();
+  const method = 'POST';
+  const url = 'https://api.npoint.io/849d375c31f4f5224457';
+  const favPeopleString = JSON.stringify(favPeople);
 
+  post.responseType = 'json';
+  post.open(method, url);
+  post.setRequestHeader('Content-Type', 'application/json');
+  post.send(favPeopleString);
+}
